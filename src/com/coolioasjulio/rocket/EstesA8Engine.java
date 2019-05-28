@@ -1,10 +1,6 @@
 package com.coolioasjulio.rocket;
 
 public class EstesA8Engine extends Engine {
-
-    private static final double START_MASS = 0.0167; // kg
-    private static final double PROPELLANT_MASS = 0.0033; // kg
-    private static final double BURN_TIME = 0.73; // sec
     private static final double[][] THRUST_POINTS = new double[][]{ // { sec, N }
             {0.041, 0.512},
             {0.084, 2.115},
@@ -31,8 +27,13 @@ public class EstesA8Engine extends Engine {
             {0.730, 0.000}
     };
 
+    private static final double[][] MASS_POINTS = new double[][]{
+            {0.0, 0.0167},
+            {0.73, 0.0134},
+            {3.73, 0.0102}
+    };
 
     public EstesA8Engine() {
-        super(THRUST_POINTS, START_MASS, START_MASS - PROPELLANT_MASS, BURN_TIME);
+        super(THRUST_POINTS, MASS_POINTS);
     }
 }

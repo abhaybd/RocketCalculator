@@ -8,15 +8,16 @@ public class Engine {
         return Math.max(Math.min(d, high), low);
     }
 
-    private static DoubleUnaryOperator createThrustCurve(double[][] thrustPoints) {
+    private static DoubleUnaryOperator interpolatedCurve(double[][] points) {
         return t -> {
-            for (int i = 0; i < thrustPoints.length - 1; i++) {
-                double t1 = thrustPoints[i][0];
-                double t2 = thrustPoints[i+1][0];
+            t = clamp(t, 0, points[points.length - 1][0]);
+            for (int i = 0; i < points.length - 1; i++) {
+                double t1 = points[i][0];
+                double t2 = points[i + 1][0];
                 if (t >= t1 && t <= t2) {
                     double dt = t2 - t1;
                     double percentage = (t - t1) / dt;
-                    return interpolate(thrustPoints[i][1], thrustPoints[i+1][1], percentage);
+                    return interpolate(points[i][1], points[i + 1][1], percentage);
                 }
             }
             return 0;
@@ -31,11 +32,11 @@ public class Engine {
     private DoubleUnaryOperator massCurve;
 
     public Engine(double[][] thrustPoints, double startMass, double endMass, double burnTime) {
-        this(createThrustCurve(thrustPoints), startMass, endMass, burnTime);
+        this(thrustPoints, new double[][]{{0, startMass}, {burnTime, endMass}});
     }
 
-    public Engine(DoubleUnaryOperator thrustCurve, double startMass, double endMass, double burnTime) {
-        this(thrustCurve, t -> interpolate(startMass, endMass, clamp(t, 0, burnTime) / burnTime));
+    public Engine(double[][] thrustPoints, double[][] massPoints) {
+        this(interpolatedCurve(thrustPoints), interpolatedCurve(massPoints));
     }
 
     public Engine(DoubleUnaryOperator thrustCurve, DoubleUnaryOperator massCurve) {

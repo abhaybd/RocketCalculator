@@ -7,7 +7,7 @@ public class RocketSimulator {
     private static final double G = 9.81; // m/s^2
 
     public static void main(String[] args) {
-        Rocket rocket = new Rocket(0.010, 0.0013, 0.82, new EstesA8Engine());
+        Rocket rocket = new Rocket(0.007, 0.00025, 0.75, new EstesA8Engine());
         System.out.println(new RocketSimulator(rocket, 0.001).simulate().getApogee());
     }
 
@@ -50,7 +50,7 @@ public class RocketSimulator {
         lastAcceleration = acceleration;
         double oldVelocity = velocity;
         velocity = newVelocity;
-        System.out.printf("%d - time=%.3f, velocity=%.2f, height=%.2f\n", timestep, time, velocity, height);
+        //System.out.printf("%d - time=%.3f, mass=%.3f, velocity=%.2f, height=%.2f\n", timestep, time, mass, velocity, height);
         return velocity <= 0.0 && oldVelocity > 0.0;
     }
 
